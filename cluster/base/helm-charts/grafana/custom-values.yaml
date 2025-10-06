@@ -1,18 +1,18 @@
 persistence:
-  enabled: true
-  storageClassName: loki-storage  # твой SC
+  enabled: false
+  storageClassName: grafina-sc # твой SC
   accessModes:
     - ReadWriteOnce
-  size: 200Mi  # минимальный PVC
+  size: 100Mi # минимальный PVC
   annotations: {}
 
-resources:
-  limits:
-    cpu: 100m
-    memory: 128Mi
-  requests:
-    cpu: 50m
-    memory: 64Mi
+# resources:
+#   limits:
+#     cpu: 100m
+#     memory: 128Mi
+#   requests:
+#     cpu: 50m
+#     memory: 64Mi
 
 adminUser: admin
 adminPassword: admin
