@@ -1,26 +1,28 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: base-applications
+  name: prod-application
   namespace: argocd
 spec:
   generators:
     - list:
         elements:
-          - name: gateway
+          - name: base-applications
             path: cluster/base
+          - name: project-chiz_work_gd
+            path: cluster/projects/chiz_work_gd
 
   template:
     metadata:
-      name: '{{name}}'
+      name: "{{name}}"
     spec:
       project: default
       source:
-        repoURL: 'https://github.com/AndreyChiz/chiz.work.gd-GitOps'
+        repoURL: "https://github.com/AndreyChiz/chiz.work.gd-GitOps"
         targetRevision: main
-        path: '{{path}}'       # конкретная папка
+        path: "{{path}}" # конкретная папка
       destination:
-        server: 'https://kubernetes.default.svc'
+        server: "https://kubernetes.default.svc"
         namespace: default
       syncPolicy:
         automated:
