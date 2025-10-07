@@ -1,0 +1,17 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: gateway-ingress-tls
+  labels:
+    app: gateway
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`gateway.chiz.work.gd`)
+      kind: Rule
+      services:
+        - name: gateway-service
+          port: 80
+  tls:
+    certResolver: letsencrypt
