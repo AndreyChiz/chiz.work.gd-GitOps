@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: base-applications
+  namespace: argocd
+spec:
+  generators:
+    - list:
+        elements:
+          - name: gateway
+            path: cluster/base
+
+  template:
+    metadata:
+      name: '{{name}}'
+    spec:
+      project: default
+      source:
+        repoURL: 'https://github.com/AndreyChiz/chiz.work.gd-GitOps'
+        targetRevision: main
+        path: '{{path}}'       # конкретная папка
+      destination:
+        server: 'https://kubernetes.default.svc'
+        namespace: default
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true

@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: storage-applications
+  name: root-base-storages
   namespace: argocd
 spec:
   project: default
