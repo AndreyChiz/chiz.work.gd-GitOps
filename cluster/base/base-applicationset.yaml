@@ -1,18 +1,12 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: helm-applications
+  name: base-helm-applications
   namespace: argocd
 spec:
   generators:
     - list:
         elements:
-          - name: grafana
-            path: cluster/base/helm-charts/grafana
-          - name: prometheus
-            path: cluster/base/helm-charts/prometheus
-          # - name: loki-stack
-          #   path: cluster/base/helm-charts/loki-stack
           - name: metrics-server
             path: cluster/base/helm-charts/metrics-server
           - name: traefik
@@ -30,10 +24,8 @@ spec:
           valueFiles:
             - values.yaml
             - custom-values.yaml
-
       destination:
         server: https://kubernetes.default.svc
-        # namespace убран, будет использовать namespace из чарта
       syncPolicy:
         automated:
           prune: true

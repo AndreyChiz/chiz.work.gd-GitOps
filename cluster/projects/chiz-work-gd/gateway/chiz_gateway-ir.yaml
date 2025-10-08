@@ -1,0 +1,18 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: chiz-gateway-ingress
+  labels:
+    app: gateway
+spec:
+  entryPoints:
+    - web
+    - websecure
+  routes:
+    - match: Host(`chiz.work.gd`)
+      kind: Rule
+      services:
+        - name: chiz-gateway-service
+          port: 80
+  tls:
+    certResolver: letsencrypt

@@ -7,10 +7,10 @@ spec:
   generators:
     - list:
         elements:
-          - name: base-applications
+          - name: base-applicationset
             path: cluster/base
-          - name: project-chiz_work_gd
-            path: cluster/projects/chiz_work_gd
+          - name: projects-applicationset
+            path: cluster/projects/
 
   template:
     metadata:
@@ -20,11 +20,24 @@ spec:
       source:
         repoURL: "https://github.com/AndreyChiz/chiz.work.gd-GitOps"
         targetRevision: main
-        path: "{{path}}" # конкретная папка
+        path: "{{path}}" # путь к ApplicationSet
+        directory:
+          recurse: false
       destination:
         server: "https://kubernetes.default.svc"
-        namespace: default
+        # namespace: argocd
       syncPolicy:
         automated:
           prune: true
           selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - PruneLast=true
+          - ApplyOutOfSyncOnly=true
+          - Validate=true
+        retry:
+          limit: 5
+          backoff:
+            duration: 5s
+            factor: 2
+            maxDuration: 3m

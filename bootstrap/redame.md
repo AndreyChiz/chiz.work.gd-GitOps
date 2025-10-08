@@ -187,4 +187,11 @@ sudo rm -rf /run/containerd/io.containerd.runtime.v2.task/*
 sudo rm -rf /run/containerd/io.containerd.grpc.v1.cri/sandboxes/*
 sudo systemctl start containerd
 
+
+> sudo systemctl stop kubelet
+sudo systemctl stop containerd
+sudo rm -rf /var/lib/containerd /run/containerd
+sudo systemctl start containerd
+sudo systemctl start kubelet
+
 ```

@@ -14,7 +14,7 @@ ports:
     protocol: TCP
     nodePort: 30001 # 👈 свой NodePort
 
-  websecure:  
+  websecure:
     port: 8443
     expose:
       default: true
@@ -39,22 +39,40 @@ deployment:
   serviceAccount:
     create: true
     name: traefik
+  additionalVolumes:
+    - name: acme-data
+      hostPath:
+        path: /var/lib/traefik-data
+        type: DirectoryOrCreate
+  additionalVolumeMounts:
+    - name: acme-data
+      mountPath: /data
   additionalArguments:
     - "--api.dashboard=true"
     - "--api.insecure=true"
     - "--entrypoints.web.address=:80"
     - "--entrypoints.websecure.address=:443"
     - "--providers.kubernetescrd"
-    - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
-    - "--certificatesresolvers.myresolver.acme.httpchallenge.entryPoint=web"
-    - "--certificatesresolvers.myresolver.acme.email=andrey.chizhov.dev@gmail.com"
-    - "--certificatesresolvers.myresolver.acme.storage=/data/acme.json"
+    - "--certificatesresolvers.letsencrypt.acme.tlschallenge=true"
+    - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entryPoint=web"
+    - "--certificatesresolvers.letsencrypt.acme.email=andrey.chizhov.dev@gmail.com"
+    - "--certificatesresolvers.letsencrypt.acme.storage=/data/acme.json"
     - "--log.level=DEBUG"
     - "--accesslog=true"
 
+# persistence:
+#   enabled: true
+#   type: emptyDir
+#   size: 50Mi
+#   mountPath: /data
+
 persistence:
-  enabled: true
-  size: 50Mi
-  storageClass: trefeik-sc
-  mountPath: /data
-  accessMode: ReadWriteOnce
+  enabled: false
+  # type: hostPath
+  # hostPath: /var/lib/traefik-data
+  # mountPath: /data
+  # accessMode: ReadWriteOnce
+
+logs:
+  access:
+    enabled: true

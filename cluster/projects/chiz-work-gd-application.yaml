@@ -1,18 +1,19 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: root-base-storages
+  name: chiz-work-gd
   namespace: argocd
 spec:
   project: default
   source:
     repoURL: "https://github.com/AndreyChiz/chiz.work.gd-GitOps"
     targetRevision: main
-    path: cluster/base/storages
-    directory: {}
+    path: "cluster/projects/chiz-work-gd"
+    directory:
+      recurse: true   # чтобы взять все подпапки: docker-registry-secret и gateway
   destination:
-    server: https://kubernetes.default.svc
-    namespace: storage-applications
+    server: "https://kubernetes.default.svc"
+    namespace: default
   syncPolicy:
     automated:
       prune: true
@@ -20,6 +21,8 @@ spec:
     syncOptions:
       - CreateNamespace=true
       - PruneLast=true
+      - ApplyOutOfSyncOnly=true
+      - Validate=true
     retry:
       limit: 5
       backoff:
