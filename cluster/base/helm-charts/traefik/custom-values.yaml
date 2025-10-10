@@ -37,6 +37,9 @@ ingressRoute:
     middlewares:
       - name: traefik-dashboard-auth
       - name: strip-traefik-prefix
+    tls:
+      certResolver: letsencrypt
+
 
 
 
