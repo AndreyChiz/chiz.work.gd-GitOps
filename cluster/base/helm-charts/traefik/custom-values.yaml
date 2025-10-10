@@ -2,7 +2,6 @@ service:
   type: NodePort
 
 ports:
-
   web:
     port: 8000
     expose:
@@ -17,20 +16,29 @@ ports:
     exposedPort: 443
     nodePort: 30000
 
-  traefik:
-    port: 8080
-    expose:
-      default: true
-    exposedPort: 8080
-    protocol: TCP
+  # traefik:
+  #   port: 8080
+  #   expose:
+  #     default: true
+  #   exposedPort: 8080
+  #   protocol: TCP
 
-api:
-  dashboard: true
-  insecure: true
+# api:
+#   dashboard: true
+#   insecure: false
 
 ingressRoute:
   dashboard:
     enabled: true
+    # Custom match rule with host domain
+    matchRule: Host(`chiz.work.gd`) && PathPrefix(`/traefik`)
+    entryPoints: ["websecure"]
+    # Add custom middlewares : authentication and redirection
+    middlewares:
+      - name: traefik-dashboard-auth
+      - name: strip-traefik-prefix
+
+
 
 ingressClass:
   enabled: true
@@ -54,7 +62,6 @@ logs:
     level: INFO
   access:
     enabled: true
-
 
 metrics:
   prometheus:
@@ -87,7 +94,6 @@ deployment:
           mountPath: /data
 
 extraObjects:
-
   - apiVersion: storage.k8s.io/v1
     kind: StorageClass
     metadata:
@@ -107,3 +113,32 @@ extraObjects:
       persistentVolumeReclaimPolicy: Delete
       hostPath:
         path: /mnt/data/traefik/acme
+
+  - apiVersion: v1
+    kind: Secret
+    metadata:
+      name: traefik-dashboard-auth-secret
+      namespace: traefik
+    type: kubernetes.io/basic-auth
+    stringData:
+      username: admin
+      password: changeme
+
+  - apiVersion: traefik.io/v1alpha1
+    kind: Middleware
+    metadata:
+      name: traefik-dashboard-auth
+      namespace: traefik
+    spec:
+      basicAuth:
+        secret: traefik-dashboard-auth-secret
+
+  - apiVersion: traefik.io/v1alpha1
+    kind: Middleware
+    metadata:
+      name: strip-traefik-prefix
+      namespace: traefik
+    spec:
+      stripPrefix:
+        prefixes:
+          - /traefik
