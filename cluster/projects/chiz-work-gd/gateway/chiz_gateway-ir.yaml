@@ -1,25 +1,25 @@
-apiVersion: gateway.networking.k8s.io/v1 # Gateway API
-kind: HTTPRoute # Описание HTTP маршрутов
-metadata:
-  name: chiz-gateway-route # Имя ресурса HTTPRoute
-  namespace: chiz-work-gd # Namespace ресурса
-  labels:
-    app: gateway # Лейбл для удобства
-spec:
-  parentRefs:
-    - name: traefik-gateway # Имя Gateway, созданного Traefik
-      namespace: traefik # Namespace Gateway
-      sectionName: websecure # HTTPS listener
-    - name: traefik-gateway
-      namespace: traefik
-      sectionName: web # HTTP listener
-  hostnames:
-    - "chiz.work.gd" # Домен для маршрута
-  rules:
-    - matches:
-        - path:
-            type: PathPrefix
-            value: / # Префикс всех путей
-      backendRefs:
-        - name: chiz-gateway-service # Сервис для маршрута
-          port: 80 # Порт сервиса
+# apiVersion: gateway.networking.k8s.io/v1 # Gateway API
+# kind: HTTPRoute # Описание HTTP маршрутов
+# metadata:
+#   name: chiz-gateway-route # Имя ресурса HTTPRoute
+#   namespace: chiz-work-gd # Namespace ресурса
+#   labels:
+#     app: gateway # Лейбл для удобства
+# spec:
+#   parentRefs:
+#     - name: traefik-gateway # Имя Gateway, созданного Traefik
+#       namespace: traefik # Namespace Gateway
+#       sectionName: websecure # HTTPS listener
+#     - name: traefik-gateway
+#       namespace: traefik
+#       sectionName: web # HTTP listener
+#   hostnames:
+#     - "chiz.work.gd" # Домен для маршрута
+#   rules:
+#     - matches:
+#         - path:
+#             type: PathPrefix
+#             value: / # Префикс всех путей
+#       backendRefs:
+#         - name: chiz-gateway-service # Сервис для маршрута
+#           port: 80 # Порт сервиса
