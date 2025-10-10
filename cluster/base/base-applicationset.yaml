@@ -10,9 +10,9 @@ spec:
           - name: metrics-server
             path: cluster/base/helm-charts/metrics-server
             namespace: kube-system
-          # - name: traefik
-          #   path: cluster/base/helm-charts/traefik
-          #   namespace: traefik
+          - name: traefik
+            path: cluster/base/helm-charts/traefik
+            namespace: traefik
   template:
     metadata:
       name: "{{name}}"
