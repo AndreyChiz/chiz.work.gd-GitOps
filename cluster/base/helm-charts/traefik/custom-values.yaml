@@ -36,8 +36,6 @@ ingressRoute:
     # Add custom middlewares : authentication and redirection
     middlewares:
       - name: traefik-dashboard-auth
-      - name: strip-traefik-prefix
-      - name: dashboard-api-rewrite
 
     tls:
       certResolver: letsencrypt
