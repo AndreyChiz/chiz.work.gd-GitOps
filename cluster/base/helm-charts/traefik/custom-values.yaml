@@ -37,6 +37,7 @@ ingressRoute:
     middlewares:
       - name: traefik-dashboard-auth
       - name: strip-traefik-prefix
+      - name: dashboard-api-rewrite
 
 
     tls:
