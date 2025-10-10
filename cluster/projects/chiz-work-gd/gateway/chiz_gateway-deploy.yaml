@@ -2,23 +2,24 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: chiz-gateway-deployment
+  namespace: chiz-work-gd                 # Namespace, где разворачиваем
   labels:
-    app: gateway
+    app: chiz-work-gd-gateway-app        # Лейбл, который используем как селектор для сервиса/Traefik
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: gateway
+      app: chiz-work-gd-gateway-app      # Должен совпадать с лейблом пода
   template:
     metadata:
       labels:
-        app: gateway
+        app: chiz-work-gd-gateway-app
     spec:
       containers:
         - name: gateway
           image: reg.chiz.work.gd/gateway:latest
           imagePullPolicy: Always
           ports:
-            - containerPort: 8002
+            - containerPort: 8002          # Порт внутри контейнера
       imagePullSecrets:
-        - name: regcred
+        - name: regcred                   # Секрет для доступа к приватному registry
