@@ -37,6 +37,8 @@ ingressRoute:
     middlewares:
       - name: traefik-dashboard-auth
       - name: strip-traefik-prefix
+      - name: dashboard-api-rewrite
+
     tls:
       certResolver: letsencrypt
 
@@ -146,3 +148,12 @@ extraObjects:
         prefixes:
           - /traefik
 
+  - apiVersion: traefik.io/v1alpha1
+    kind: Middleware
+    metadata:
+      name: dashboard-api-rewrite
+      namespace: traefik
+    spec:
+      replacePathRegex:
+        regex: ^/api/(.*)
+        replacement: /traefik/api/$1
