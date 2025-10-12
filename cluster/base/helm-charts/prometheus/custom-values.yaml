@@ -56,6 +56,34 @@ server:
     ##
     enabled: false
 
+  ingress:
+    enabled: true
+    ingressClassName: "traefik"
+    annotations:
+      traefik.ingress.kubernetes.io/router.entrypoints: websecure
+      traefik.ingress.kubernetes.io/router.tls: "true"
+      traefik.ingress.kubernetes.io/router.tls.certresolver: letsencrypt
+    extraLabels:
+      app: prometheus
+    hosts:
+      - prometheus.chiz.work.gd
+    path: /
+    pathType: Prefix
+    tls:
+      - hosts:
+          - prometheus.chiz.work.gd
+
+  global:
+    ## How frequently to scrape targets by default
+    ##
+    scrape_interval: 20s
+    ## How long until a scrape request times out
+    ##
+    scrape_timeout: 10s
+    ## How frequently to evaluate rules
+    ##
+    evaluation_interval: 1m
+
 alertmanager:
   ## If false, alertmanager will not be installed
   ##
