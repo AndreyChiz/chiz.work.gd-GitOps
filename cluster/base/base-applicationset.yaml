@@ -13,6 +13,9 @@ spec:
           - name: traefik
             path: cluster/base/helm-charts/traefik
             namespace: traefik
+          - name: prometheus
+            path: cluster/base/helm-charts/prometheus
+            namespace: monitoring
   template:
     metadata:
       name: "{{name}}"

@@ -1,32 +1,68 @@
+# server:
+#   persistentVolume:
+#     enabled: false
+#     storageClassName: prometeos-sc
+#     accessModes:
+#       - ReadWriteOnce
+#     size: 500Mi # минимальный PVC
+#   resources:
+#     limits:
+#       cpu: 200m
+#       memory: 256Mi
+#     requests:
+#       cpu: 100m
+#       memory: 128Mi
+#   retention: "2d" # минимальный срок хранения метрик
+
+# # alertmanager:
+# #   enabled: true
+
+# #   persistence:
+# #     enabled: false
+# #     # Укажи storageClass, если нужно привязать к конкретному
+# #     # storageClass: alertmanager-sc
+
+# #     accessModes:
+# #       - ReadWriteOnce
+# #     size: 100Mi
+
+# #     annotations: {}
+# #     labels: {}
+
+# #     emptyDir: {}
+
+# # alertmanager:
+# #   enabled: false
+# # alertmanagerFiles:
+# #   alertmanager.yml: ""
+# # kubeStateMetrics:
+# #   enabled: false
+# # nodeExporter:
+# #   enabled: false
+# # pushgateway:
+# #   enabled: false
+# # server:
+# #   extraArgs:
+# #     storage.local.retention: 720h
+# # serverFiles:
+# #   alerts: ""
+# #   prometheus.yml: ""
+# #   rules: ""
+
 server:
   persistentVolume:
+    ## If true, Prometheus server will create/use a Persistent Volume Claim
+    ## If false, use emptyDir
+    ##
     enabled: false
-    storageClassName: prometeos-sc
-    accessModes:
-      - ReadWriteOnce
-    size: 500Mi # минимальный PVC
-  resources:
-    limits:
-      cpu: 200m
-      memory: 256Mi
-    requests:
-      cpu: 100m
-      memory: 128Mi
-  retention: "2d" # минимальный срок хранения метрик
 
 alertmanager:
+  ## If false, alertmanager will not be installed
+  ##
   enabled: true
 
   persistence:
+    ## If true, storage will create or use Persistence Volume
+    ## If false, storage will use emptyDir
+    ##
     enabled: false
-    # Укажи storageClass, если нужно привязать к конкретному
-    # storageClass: alertmanager-sc
-
-    accessModes:
-      - ReadWriteOnce
-    size: 100Mi
-
-    annotations: {}
-    labels: {}
-
-    emptyDir: {}
