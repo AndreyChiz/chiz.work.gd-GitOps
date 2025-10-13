@@ -52,3 +52,62 @@ extraObjects:
       storageClassName: grafana-sc
       hostPath:
         path: /mnt/data/grafana
+
+#-------------------------------------------------------------
+
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+      - name: Prometheus
+        type: prometheus
+        access: proxy
+        url: http://prometheus-server.monitoring.svc.cluster.local:80
+        isDefault: true
+        jsonData:
+          timeInterval: "10s"
+      - name: Node Exporter
+        type: prometheus
+        access: proxy
+        url: http://prometheus-prometheus-node-exporter.monitoring.svc.cluster.local:9100
+      - name: Kube State Metrics
+        type: prometheus
+        access: proxy
+        url: http://prometheus-kube-state-metrics.monitoring.svc.cluster.local:8080
+
+dashboardProviders:
+  dashboardproviders.yaml:
+    apiVersion: 1
+    providers:
+      - name: 'default'
+        orgId: 1
+        folder: ''
+        type: file
+        disableDeletion: false
+        editable: true
+        options:
+          path: /var/lib/grafana/dashboards/default
+
+dashboards:
+  default:
+    node-exporter-full:
+      gnetId: 1860
+      revision: 29
+      datasource: Prometheus
+    kubernetes-cluster-monitoring:
+      gnetId: 315
+      revision: 2
+      datasource: Prometheus
+    pods-resources:
+      gnetId: 6417
+      revision: 1
+      datasource: Prometheus
+
+grafana.ini:
+  server:
+    root_url: https://grafana.chiz.work.gd/
+    serve_from_sub_path: true
+  security:
+    allow_embedding: true
+    cookie_secure: true
+    cookie_samesite: none
