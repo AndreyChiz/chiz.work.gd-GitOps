@@ -15,7 +15,7 @@ ports:
       default: true
     exposedPort: 443
     nodePort: 30000
-
+ 
   # traefik:
   #   port: 8080
   #   expose:
@@ -52,6 +52,10 @@ providers:
     enabled: true
   kubernetesGateway:
     enabled: false
+
+### !!!
+additionalArguments:
+  - "--providers.kubernetesingress.ingressendpoint.publishedservice=traefik/traefik"
 
 logs:
   general:
@@ -128,5 +132,3 @@ extraObjects:
     spec:
       basicAuth:
         secret: traefik-dashboard-auth-secret
-
-

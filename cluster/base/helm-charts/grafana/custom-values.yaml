@@ -1,20 +1,54 @@
+
+service:
+  port: 80
+  type: ClusterIP
+
 persistence:
-  enabled: false
-  storageClassName: grafina-sc # твой SC
+  enabled: true
+  storageClassName: grafana-sc
   accessModes:
     - ReadWriteOnce
-  size: 100Mi # минимальный PVC
+  size: 300Mi
   annotations: {}
 
-# resources:
-#   limits:
-#     cpu: 100m
-#     memory: 128Mi
-#   requests:
-#     cpu: 50m
-#     memory: 64Mi
-
-adminUser: admin
-adminPassword: admin
 ingress:
-  enabled: false
+  enabled: true
+  ingressClassName: traefik
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
+    traefik.ingress.kubernetes.io/router.tls.certresolver: letsencrypt
+  extraLabels:
+    app: grafana
+  paths:
+    - /
+  pathType: Prefix
+  hosts:
+    - grafana.chiz.work.gd
+  tls:
+    - hosts:
+        - grafana.chiz.work.gd
+
+adminUser: achi
+adminPassword: "123"
+
+extraObjects:
+  - apiVersion: storage.k8s.io/v1
+    kind: StorageClass
+    metadata:
+      name: grafana-sc
+    provisioner: kubernetes.io/no-provisioner
+
+  - apiVersion: v1
+    kind: PersistentVolume
+    metadata:
+      name: grafana-pv
+    spec:
+      capacity:
+        storage: 300Mi
+      accessModes:
+        - ReadWriteOnce
+      persistentVolumeReclaimPolicy: Delete
+      storageClassName: grafana-sc
+      hostPath:
+        path: /mnt/data/grafana

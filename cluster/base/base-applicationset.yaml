@@ -16,6 +16,9 @@ spec:
           - name: prometheus
             path: cluster/base/helm-charts/prometheus
             namespace: monitoring
+          - name: grafana
+            path: cluster/base/helm-charts/grafana
+            namespace: monitoring
   template:
     metadata:
       name: "{{name}}"
@@ -41,6 +44,7 @@ spec:
           - PruneLast=true
           - ApplyOutOfSyncOnly=true
           - Validate=true
+          - Replace=true
         retry:
           limit: 5
           backoff:
