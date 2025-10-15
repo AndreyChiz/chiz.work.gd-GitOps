@@ -13,12 +13,15 @@ spec:
           - name: traefik
             path: cluster/base/helm-charts/traefik
             namespace: traefik
-          - name: prometheus
-            path: cluster/base/helm-charts/prometheus
-            namespace: monitoring
-          - name: grafana
-            path: cluster/base/helm-charts/grafana
-            namespace: monitoring
+          # - name: prometheus
+          #   path: cluster/base/helm-charts/prometheus
+          #   namespace: monitoring
+          # - name: grafana
+          #   path: cluster/base/helm-charts/grafana
+          #   namespace: monitoring
+          # - name: tempo
+          #   path: cluster/base/helm-charts/tempo
+          #   namespace: monitoring
   template:
     metadata:
       name: "{{name}}"

@@ -15,13 +15,38 @@ ports:
       default: true
     exposedPort: 443
     nodePort: 30000
- 
-  # traefik:
-  #   port: 8080
-  #   expose:
-  #     default: true
-  #   exposedPort: 8080
-  #   protocol: TCP
+
+env:
+  - name: USER
+    value: "traefik"
+
+tracing:
+  addInternals: false
+  serviceName: traefik
+  sampleRate: 1.0
+  resourceAttributes:
+    service.name: "traefik"
+    deployment.environment: "prod"
+    host.name: "traefik"
+  capturedRequestHeaders: []
+  capturedResponseHeaders: []
+  safeQueryParams: []
+  otlp:
+    enabled: true
+    grpc:
+      enabled: true
+      endpoint: tempo.monitoring.svc.cluster.local:4317
+      insecure: true
+    http:
+      enabled: false
+
+
+# traefik:
+#   port: 8080
+#   expose:
+#     default: true
+#   exposedPort: 8080
+#   protocol: TCP
 
 # api:
 #   dashboard: true

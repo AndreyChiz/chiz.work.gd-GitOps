@@ -1,0 +1,91 @@
+replicas: 1
+
+tempo:
+  repository: grafana/tempo
+  tag: ""
+  pullPolicy: IfNotPresent
+
+  # -------------------------
+  # Минимальные ресурсы для теста
+  resources:
+    requests:
+      cpu: 250m
+      memory: 512Mi
+    limits:
+      cpu: 500m
+      memory: 1Gi
+
+  memBallastSizeMbs: 512
+  multitenancyEnabled: false
+  reportingEnabled: false
+  retention: 24h
+
+  # -------------------------
+  server:
+    http_listen_port: 3200
+
+  storage:
+    trace:
+      backend: local
+      local:
+        path: /var/tempo/traces
+
+  # -------------------------
+  ingester:
+    lifecycler:
+      ring:
+        kvstore:
+          store: inmemory
+        replication_factor: 1
+
+  distributor:
+    ring:
+      kvstore:
+        store: inmemory
+
+  receivers:
+    jaeger:
+      protocols:
+        grpc: {}
+        thrift_http: {}
+    otlp:
+      protocols:
+        grpc: {}
+        http: {}
+
+  querier: {}
+  queryFrontend: {}
+
+  # -------------------------
+  # Readiness/Liveness probes
+  livenessProbe:
+    httpGet:
+      path: /ready
+      port: 3200
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+    successThreshold: 1
+
+  readinessProbe:
+    httpGet:
+      path: /ready
+      port: 3200
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+    successThreshold: 1
+
+tempoQuery:
+  enabled: false
+
+service:
+  type: ClusterIP
+  ports:
+    grpc: 4317
+    http: 3200
+
+persistence:
+  enabled: false
